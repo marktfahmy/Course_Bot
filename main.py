@@ -1,10 +1,9 @@
 import discord
-from arkk_info import Data
-
+from stock_info import Data
+from course_finder import Course
 
 client = discord.Client()
-data = Data()
-
+course = Course()
 
 with open('credentials.txt', 'r') as f:
     TOKEN = f.read()
@@ -16,20 +15,36 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.guild.id == 709810612296876046:
-        if message.content == ".arkk":
-            data.make_graph()
-            info = data.update()
-            file = discord.File("plot.png")
-            embed = discord.Embed(title="ARKK Stock Prices", color=discord.Color.blue())
-            embed.set_thumbnail(url="https://i.imgur.com/MirvZiJ.png")
-            embed.add_field(name="High", value="USD$" + str(round(info[0], 2)))
-            embed.add_field(name="Low", value="USD$" + str(round(info[1], 2)))
-            embed.add_field(name="Close", value="USD$" + str(round(info[2], 2)))
-            embed.add_field(name="% of $150.19 at close", value=str(round(info[2]/150.19*100,2)) + "%")
-            embed.set_footer(text="Most Recently Updated " + info[3].strftime("%A %d, %Y"))
-            embed.set_image(url="attachment://plot.png")
-            await message.channel.send(embed=embed, file=file)
+        if message.content[:7] == ".stock ":
+            stock = message.content[7:].upper()
+            print(stock)
+            try:
+                data = Data(stock)
+                data.make_graph()
+                info = data.update()
+                file = discord.File("plot.png")
+                embed = discord.Embed(title=f"{stock} Stock Prices", color=discord.Color.blue())
+                embed.add_field(name="High", value="USD$" + str(round(info[0], 2)))
+                embed.add_field(name="Low", value="USD$" + str(round(info[1], 2)))
+                embed.add_field(name="Close", value="USD$" + str(round(info[2], 2)))
+                if stock == "ARKK":
+                    embed.add_field(name="% of $150.19 at close", value=str(round(info[2]/150.19*100,2)) + "%")
+                embed.set_footer(text="Most Recently Updated " + info[3].strftime("%A %d, %Y"))
+                embed.set_image(url="attachment://plot.png")
+                await message.channel.send(embed=embed, file=file)
+            except:
+                await message.channel.send("Failed")
+            print("got stock")
+        elif message.content[:8] == ".course ":
+            try:
+                course_code = message.content[8:]
+                course_data = course.find_course(course_code)
+                embed = discord.Embed(title=course_data[0], color=discord.Color.blue(), description=course_data[2]+'\n\n'+course_data[1]+"; "+course_data[3])
+                embed.add_field(name="Other Info", value=course_data[4])
+                await message.channel.send(embed=embed)
+            except:
+                await message.channel.send("Failed")
+            print("got course")
 
 
 client.run(TOKEN)

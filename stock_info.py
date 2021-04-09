@@ -15,10 +15,10 @@ class Data:
         return [price_data['High'][-1], price_data['Low'][-1], price_data['Close'][-1], price_data['High'].keys()[0]]
 
     def make_graph(self):
-        price_data = self.ticker.history(period='max')
-        all_dates = price_data['Close'].keys()
         oldest = dt.datetime(2021, 1, 1)
         newest = dt.datetime.now()
+        price_data = self.ticker.history(start=oldest, end=newest)
+        all_dates = price_data['Close'].keys()
         relevant = price_data[(all_dates > oldest) & (all_dates < newest)]
         data = relevant['Close']
         dates = data.keys()
@@ -31,3 +31,4 @@ class Data:
         ax.set(xlabel="Date", ylabel="Price (USD)", title=f"{self.stock} Daily Close Stock Prices")
         ax.legend()
         plt.savefig("plot")
+        plt.close()

@@ -17,7 +17,6 @@ async def on_ready():
 async def on_message(message):
         if message.content[:7] == ".stock ":
             stock = message.content[7:].upper()
-            print(stock)
             try:
                 data = Data(stock)
                 data.make_graph()

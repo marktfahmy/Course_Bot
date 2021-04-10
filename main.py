@@ -45,5 +45,4 @@ async def on_message(message):
                 await message.channel.send("Failed")
             print("got course")
 
-
 client.run(TOKEN)

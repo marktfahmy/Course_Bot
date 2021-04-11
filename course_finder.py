@@ -20,10 +20,12 @@ class Course():
 
         course_name = content.h1.text.strip()
         unit_count = int(str(content.text)[str(content.text).index("unit")-3:str(content.text).index("unit")-1])
-        course_desc = content.text[content.text.index("unit(s)")+7:content.text.index("\n")].strip()
-        content = content.text[content.text.index("\n")+1:]
-        hours = content[:content.index("\n")]
-        reqs = content[content.index("\n")+1:]
+        new_cont = str(content)[str(content).index("unit(s)")+18:]
+        course_desc = new_cont[:str(new_cont).index("<br/>")]
+        new_cont = new_cont[new_cont.index("<br/>")+5:]
+        hours = new_cont[:new_cont.index("<br/>")]
+        new_cont = new_cont[new_cont.index("<br/>")+5:]
+        reqs = content.text[content.text.index("Prerequisite"):]
         return [course_name,unit_count,course_desc,hours,reqs]
 
     def find_course(self,course_code):

@@ -38,12 +38,12 @@ class Course():
                 catoid = str(course)[str(course).index("catoid=")+7:str(course).index("catoid=")+9]
                 coid = str(course)[str(course).index("coid=")+5:str(course).index("coid=")+11]
                 course_list = [catoid,coid]
-
+        
         try:
             x = self.get_course(course_list)
             return [x[0],str(x[1])+" unit(s)","Description: "+x[2],x[3],x[4]]
         except:
-            return "Error Occurred"
+            return "Error"
 
     def list_all_courses(self,dept):
         dept = dept.strip().upper()

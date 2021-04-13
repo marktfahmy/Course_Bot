@@ -14,18 +14,30 @@ class Course():
         data = BeautifulSoup(r.text,"html.parser")
         stuff = data.find_all("p")
         content = data.find("p")
+        identifiers = ["Prerequisite", "Co-requisite", "Antirequisite", "Cross-list"]
         for items in stuff:
-            if "Prerequisite" in items.text:
+            if " term" in items.text:
                 content = items
 
         course_name = content.h1.text.strip()
         unit_count = int(str(content.text)[str(content.text).index("unit")-3:str(content.text).index("unit")-1])
         new_cont = str(content)[str(content).index("unit(s)")+18:]
-        course_desc = new_cont[:str(new_cont).index("<br/>")]
+        course_desc = content.text[content.text.index("unit(s) ")+8:content.text.index("\n")]
         new_cont = new_cont[new_cont.index("<br/>")+5:]
         hours = new_cont[:new_cont.index("<br/>")]
         new_cont = new_cont[new_cont.index("<br/>")+5:]
-        reqs = content.text[content.text.index("Prerequisite"):]
+        for ids in identifiers:
+            try:
+                reqs = content.text[content.text.index(ids):]
+                break
+            except:
+                pass
+        else:
+            if "terms" in content.text:
+                reqs = content.text[content.text.index("terms")+5:]
+            else:
+                reqs = content.text[content.text.index("term")+4:]
+
         return [course_name,unit_count,course_desc,hours,reqs]
 
     def find_course(self,course_code):

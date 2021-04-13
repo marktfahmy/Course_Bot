@@ -41,7 +41,8 @@ async def on_message(message):
                 await message.channel.send(f"Failed to retrieve course data for {course_code.upper()}")
             else:
                 embed = discord.Embed(title=course_data[0], color=discord.Color.blue(), description=course_data[2]+'\n\n'+course_data[1]+"; "+course_data[3])
-                embed.add_field(name="Other Info", value=course_data[4])
+                if course_data[4]:
+                    embed.add_field(name="Other Info", value=course_data[4])
                 await message.channel.send(embed=embed)
             print(f"{message.author.name} ran command {message.content} in {message.guild.name}")
 

@@ -18,6 +18,12 @@ class Course():
         for items in stuff:
             if " term" in items.text:
                 content = items
+                break
+        else:
+            for identifier in identifiers:
+                if identifier in items.text:
+                    content = items
+                    break
 
         course_name = content.h1.text.strip()
         unit_count = int(str(content.text)[str(content.text).index("unit")-3:str(content.text).index("unit")-1])

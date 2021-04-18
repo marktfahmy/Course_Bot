@@ -23,6 +23,8 @@ class Course():
         unit_count = int(str(content.text)[str(content.text).index("unit")-3:str(content.text).index("unit")-1])
         new_cont = str(content)[str(content).index("unit(s)")+18:]
         course_desc = new_cont[:str(new_cont).index("<br/>")]
+        if "<a href" in course_desc:
+            course_desc = content.text[content.text.index("unit(s)")+8:content.text.index(course_desc[-10:])]
         new_cont = new_cont[new_cont.index("<br/>")+5:]
         hours = new_cont[:new_cont.index("<br/>")]
         new_cont = new_cont[new_cont.index("<br/>")+5:]

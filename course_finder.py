@@ -60,7 +60,19 @@ class Course():
                 catoid = str(course)[str(course).index("catoid=")+7:str(course).index("catoid=")+9]
                 coid = str(course)[str(course).index("coid=")+5:str(course).index("coid=")+11]
                 course_list = [catoid,coid]
-        
+                break
+        else:
+            url = f"https://academiccalendars.romcmaster.ca/content.php?catoid=44&navoid=9045&filter%5B27%5D={dept}&filter%5Bcpage%5D=2"
+            r = requests.get(url,verify=False)
+            soup = BeautifulSoup(r.text,"html.parser")
+            list_of_courses = soup.find_all("a", {"href": True, "target": "_blank", "aria-expanded": "false"})
+            for course in list_of_courses:
+                if course.text[:len(dept)+5] == query:
+                    catoid = str(course)[str(course).index("catoid=")+7:str(course).index("catoid=")+9]
+                    coid = str(course)[str(course).index("coid=")+5:str(course).index("coid=")+11]
+                    course_list = [catoid,coid]
+                    break
+
         try:
             x = self.get_course(course_list)
             return [x[0],str(x[1])+" unit(s)","Description: "+x[2],x[3],x[4]]

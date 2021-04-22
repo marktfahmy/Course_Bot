@@ -75,7 +75,7 @@ class Course():
 
         try:
             x = self.get_course(course_list)
-            return [x[0],str(x[1])+" unit(s)","Description: "+x[2],x[3],x[4]]
+            return [x[0],str(x[1])+" unit(s)",x[2],x[3],x[4]]
         except:
             return "Error"
 

@@ -1,5 +1,4 @@
 import discord
-from stock_info import Data
 from course_finder import Course
 
 client = discord.Client()
@@ -15,26 +14,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-        if message.content[:7] == ".stock ":
-            stock = message.content[7:].upper()
-            try:
-                data = Data(stock)
-                data.make_graph()
-                info = data.update()
-                file = discord.File("plot.png")
-                embed = discord.Embed(title=f"{stock} Stock Prices", color=discord.Color.blue())
-                embed.add_field(name="High", value="USD$" + str(round(info[0], 2)))
-                embed.add_field(name="Low", value="USD$" + str(round(info[1], 2)))
-                embed.add_field(name="Close", value="USD$" + str(round(info[2], 2)))
-                if stock == "ARKK":
-                    embed.add_field(name="% of $150.19 at close", value=str(round(info[2]/150.19*100,2)) + "%")
-                embed.set_footer(text="Most Recently Updated " + info[3].strftime("%A %d, %Y"))
-                embed.set_image(url="attachment://plot.png")
-                await message.channel.send(embed=embed, file=file)
-            except:
-                await message.channel.send(f"Failed to retrieve stock data for {stock}")
-            print(f"{message.author.name} ran command {message.content} in {message.guild.name}")
-        elif message.content[:8] == ".course ":
+        if message.content[:8] == ".course ":
             course_code = message.content[8:]
             course_data = course.find_course(course_code)
             if course_data == "Error":

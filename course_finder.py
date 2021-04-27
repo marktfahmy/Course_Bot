@@ -4,9 +4,6 @@ import warnings
 warnings.filterwarnings('ignore')
 
 class Course():
-    def __init__(self):
-        pass
-
     def get_course(self,inputted):
         catoid, coid = inputted[0], inputted[1]
         url = f"https://academiccalendars.romcmaster.ca/preview_course_nopop.php?catoid={catoid}&coid={coid}"
@@ -15,11 +12,13 @@ class Course():
         stuff = data.find_all("p")
         content = data.find("p")
         identifiers = ["Prerequisite", "Co-requisite", "Antirequisite", "Cross-list"]
+        has_terms = True
         for items in stuff:
             if " term" in items.text:
                 content = items
                 break
         else:
+            has_terms = False
             for identifier in identifiers:
                 if identifier in items.text:
                     content = items
@@ -32,7 +31,9 @@ class Course():
         if "<a href" in course_desc:
             course_desc = content.text[content.text.index("unit(s)")+8:content.text.index(course_desc[-10:])+10]
         new_cont = new_cont[new_cont.index("<br/>")+5:]
-        hours = new_cont[:new_cont.index("<br/>")]
+        hours = ""
+        if has_terms:
+            hours = new_cont[:new_cont.index("<br/>")]
         new_cont = new_cont[new_cont.index("<br/>")+5:]
         for ids in identifiers:
             try:
@@ -78,15 +79,3 @@ class Course():
             return [x[0],str(x[1])+" unit(s)",x[2],x[3],x[4]]
         except:
             return "Error"
-
-    def list_all_courses(self,dept):
-        dept = dept.strip().upper()
-        url = f"https://academiccalendars.romcmaster.ca/content.php?filter%5B27%5D={dept}&cur_cat_oid=44&navoid=9045"
-        r = requests.get(url,verify=False)
-        soup = BeautifulSoup(r.text,"html.parser")
-        list_of_courses = soup.find_all("a", {"href": True, "target": "_blank", "aria-expanded": "false"})
-        course_list = []
-        for course in list_of_courses:
-            name = course.text
-            course_list.append(name)
-        return course_list

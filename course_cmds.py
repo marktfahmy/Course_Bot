@@ -12,7 +12,7 @@ class GetCourses(commands.Cog):
      async def course(self, ctx, dept, code):
           course_data = course_finder.find_course(dept+" "+code)
           if course_data == "Error":
-               await ctx.send(f"Failed to retrieve course data for {course_code.upper()}")
+               await ctx.send(f"Failed to retrieve course data for {str(dept+' '+code).upper()}")
           else:
                embed = discord.Embed(title=course_data[0], color=discord.Color.blue(), description=course_data[2]+'\n\n'+course_data[1]+"; "+course_data[3])
                if course_data[4]:

@@ -25,10 +25,10 @@ class GetCourses(commands.Cog):
           course_list = course_finder.search_for_course(query)
           courses = "\n".join(course_list)
           if len(courses) > 1950:
-               await ctx.send(f"Please provide a more specific query. {' '.join(query)} provided too many results to display.")
+               await ctx.send(f"Please provide a more specific query. `{' '.join(query)}` provided too many results to display.")
           elif len(courses) == 0:
-               await ctx.send(f"{' '.join(query)} returned no results. Please ensure you are typing full words that appear in the course name (eg. \"discrete mathematics\" vs. \"discrete math\")")
+               await ctx.send(f"`{' '.join(query)}` returned no results. Please ensure you are typing full words that appear in the course name (eg. \"discrete mathematics\" vs. \"discrete math\")")
           else:
-               embed = discord.Embed(title=f"Courses Containing Keyword \"{' '.join(query)}\"", color=discord.Color.blue(), description=courses)
+               embed = discord.Embed(title=f"Courses Containing Keyword(s) `{', '.join(query)}`", color=discord.Color.blue(), description=courses)
                await ctx.send(embed=embed)
                print(f"{ctx.author.name} ran command {ctx.message.content} in {ctx.guild.name}")

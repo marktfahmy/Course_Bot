@@ -11,9 +11,15 @@ class Course():
     def find_course(self,course_code):
         conn = sqlite3.connect(db_file)
         dept, code = course_code.split()
-        cur = conn.cursor()
-        cur.execute(f"SELECT * FROM {dept.upper()} WHERE ID = '{code.upper()}'")
-        course = cur.fetchone()
+        try:
+            cur = conn.cursor()
+            cur.execute(f"SELECT * FROM {dept.upper()} WHERE ID = '{code.upper()}'")
+            course = cur.fetchone()
+            if course == None:
+                return "Error"
+        except Error as e:
+            print(e)
+            return "Error"
         conn.close()
         return [course[0], str(course[1]) + " unit(s)", course[2], course[3], course[4]]
 

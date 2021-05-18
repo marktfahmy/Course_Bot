@@ -8,12 +8,13 @@ warnings.filterwarnings('ignore')
 db_file = "courses.db"
 
 class Course():
-    def find_course(self,course_code):
+    def find_course(self, course_dept, course_code):
         conn = sqlite3.connect(db_file)
-        dept, code = course_code.split()
         try:
             cur = conn.cursor()
-            cur.execute(f"SELECT * FROM {dept.upper()} WHERE ID = '{code.upper()}'")
+            course_dept = course_dept.upper().replace("'", '')
+            course_code = course_code.upper().replace("'", '')
+            cur.execute(f"SELECT * FROM '{course_dept}' WHERE ID = '{course_code}'")
             course = cur.fetchone()
             if course == None:
                 return "Error"
@@ -23,7 +24,7 @@ class Course():
         conn.close()
         return [course[0], str(course[1]) + " unit(s)", course[2], course[3], course[4]]
 
-    def search_for_course(self,query):
+    def search_for_course(self, query):
         url = f"https://academiccalendars.romcmaster.ca/content.php?&filter%5Bkeyword%5D={query}&cur_cat_oid=44&navoid=9045"
         r = requests.get(url,verify=False)
         soup = BeautifulSoup(r.text,"html.parser")
@@ -33,24 +34,6 @@ class Course():
             name = course.text
             course_list.append(name)
         return course_list
-
-    def insert_course(self,course_name,description,hours,requirements):
-        course_dept, course_code = course_name.split()[:2]
-        conn = sqlite3.connect(db_file)
-        try:
-            cur = conn.cursor()
-            cur.execute(f"INSERT INTO {course_dept} VALUES ('{course_name}', {int(course_code[-1])}, '{description}', '{hours}', '{requirements}', '{course_code}')")
-            conn.commit()
-        except Error as e:
-            print(e)
-            return False
-        conn.close()
-        return True
-
-
-
-
-
 
 
 

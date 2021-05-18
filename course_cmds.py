@@ -10,9 +10,10 @@ class GetCourses(commands.Cog):
 
      @commands.command()
      async def course(self, ctx, dept, code):
-          course_data = course_mod.find_course(dept+" "+code)
+          dept, code = dept.upper().replace("'", ''), code.upper().replace("'", '')
+          course_data = course_mod.find_course(dept, code)
           if course_data == "Error":
-               await ctx.send(f"Failed to retrieve course data for {str(dept+' '+code).upper()}")
+               await ctx.send(f"Failed to retrieve course data for {dept+' '+code}")
           else:
                embed = discord.Embed(title=course_data[0], color=discord.Color.blue(), description=course_data[2]+'\n\n'+course_data[1]+"; "+course_data[3])
                if course_data[4]:

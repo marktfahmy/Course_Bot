@@ -12,8 +12,6 @@ class Course():
         conn = sqlite3.connect(db_file)
         try:
             cur = conn.cursor()
-            course_dept = course_dept.upper().replace("'", '')
-            course_code = course_code.upper().replace("'", '')
             cur.execute(f"SELECT * FROM '{course_dept}' WHERE ID = '{course_code}'")
             course = cur.fetchone()
             if course == None:

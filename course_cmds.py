@@ -34,7 +34,7 @@ class GetCourses(commands.Cog):
           elif len(courses) == 0:
                await ctx.send(f"`{' '.join(query)}` returned no results. Please ensure you are typing full words that appear in the course name (eg. \"discrete mathematics\" vs. \"discrete math\")")
           else:
-               embed = discord.Embed(title=f"Courses Containing Keyword(s) `{', '.join(query)}`", color=discord.Color.blue(), description=courses)
+               embed = discord.Embed(title=f"Courses Containing Keyword(s) `{' '.join(query)}`", color=discord.Color.blue(), description=courses)
                await ctx.send(embed=embed)
           if isinstance(ctx.channel, discord.channel.DMChannel):
                print(f"{ctx.author.name} ran command {ctx.message.content} in private messages.")

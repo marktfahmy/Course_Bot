@@ -23,7 +23,7 @@ class Course():
         return [course[0], str(course[1]) + " unit(s)", course[2], course[3], course[4]]
 
     def search_for_course(self, query):
-        url = f"https://academiccalendars.romcmaster.ca/content.php?&filter%5Bkeyword%5D={query}&cur_cat_oid=44&navoid=9045"
+        url = "https://academiccalendars.romcmaster.ca/content.php?&filter%5Bkeyword%5D=\"" + '+'.join(query) + "\"&cur_cat_oid=44&navoid=9045"
         r = requests.get(url,verify=False)
         soup = BeautifulSoup(r.text,"html.parser")
         list_of_courses = soup.find_all("a", {"href": True, "target": "_blank", "aria-expanded": "false"})

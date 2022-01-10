@@ -9,7 +9,9 @@ class GetCourses(commands.Cog):
           self.bot = bot
 
      @commands.command()
-     async def course(self, ctx, dept, code):
+     async def course(self, ctx, *inputs):
+          code = inputs[-1]
+          dept = " ".join(inputs[:-1])
           dept, code = dept.upper().replace("'", ''), code.upper().replace("'", '')
           course_data = course_mod.find_course(dept, code)
           if course_data == "Error":
@@ -42,7 +44,9 @@ class GetCourses(commands.Cog):
                print(f"{ctx.author.name} ran command {ctx.message.content} in {ctx.guild.name}.")
 
      @commands.command()
-     async def reqs(self, ctx, dept, code):
+     async def reqs(self, ctx, *inputs):
+          code = inputs[-1]
+          dept = " ".join(inputs[:-1])
           dept, code = dept.upper().replace("'", ''), code.upper().replace("'", '')
           course_data = course_mod.find_course(dept, code)
           if course_data == "Error":
